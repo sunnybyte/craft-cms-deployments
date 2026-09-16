@@ -1,0 +1,97 @@
+{% import "_includes/forms" as forms %}
+
+{% if installedVersion %}
+    <blockquote class="note tip">
+        <p>{{ 'Running {version}'|t('deployments', { version: installedVersion }) }}</p>
+    </blockquote>
+{% endif %}
+
+{{ forms.autosuggestField({
+    label: 'Webhook URL'|t('deployments'),
+    instructions: 'Where to send the deployment notification. Rendered as a Twig template, so you can put deploy data in the query string — useful for GET. Leave blank to disable the plugin.'|t('deployments'),
+    id: 'webhookUrl',
+    name: 'webhookUrl',
+    placeholder: 'https://hooks.example.com/deploy',
+    suggestEnvVars: true,
+    value: settings.webhookUrl,
+    errors: settings.getErrors('webhookUrl'),
+}) }}
+
+{{ forms.selectField({
+    label: 'Method'|t('deployments'),
+    instructions: 'HTTP method used for the webhook request.'|t('deployments'),
+    id: 'method',
+    name: 'method',
+    options: [
+        { label: 'POST', value: 'POST' },
+        { label: 'GET', value: 'GET' },
+    ],
+    value: settings.method,
+    errors: settings.getErrors('method'),
+    toggle: true,
+    targetPrefix: 'method-',
+}) }}
+
+{% set bodyInstructions %}
+Twig template for the request body. If it renders to JSON, a `Content-Type` of `application/json` is set automatically; otherwise `text/plain`.
+
+Available variables: `DEPLOY_ENVIRONMENT`, `DEPLOY_SHA`, `DEPLOY_CRAFT_VERSION`, `DEPLOY_SITE_NAME`, `DEPLOY_SITE_URL`, `DEPLOY_TIMESTAMP`, `DEPLOY_TIME`, `DEPLOY_HOSTNAME`.
+
+`DEPLOY_TIMESTAMP` is ISO 8601 in UTC; `DEPLOY_TIME` is the same moment in this site's timezone, formatted for people (`2026-09-15 11:04am PDT`).
+
+Example with JSON webhook that requires a "body" attribute:
+
+```
+{% verbatim %}{% set message %}
+  **🚀 Craft Cloud Deployment Completed**
+
+  **Site:** {{ DEPLOY_SITE_NAME }}
+  **Environment:** {{ DEPLOY_ENVIRONMENT }}: {{ DEPLOY_SITE_URL }}
+  **Commit:** {{ DEPLOY_SHA|slice(0, 7) }}
+  **Craft:** {{ DEPLOY_CRAFT_VERSION }}
+  **Deployed at:** {{ DEPLOY_TIME }}
+{% endset %}
+{"body": {{ message|trim|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}}{% endverbatim %}
+```
+
+Pipe any value that could contain quotes through `|json_encode|raw`, as with `DEPLOY_SITE_NAME` above, so it can't break the JSON.
+{% endset %}
+
+<div id="method-POST" class="{{ settings.method == 'POST' ? '' : 'hidden' }}">
+    {{ forms.textareaField({
+        label: 'Body'|t('deployments'),
+        instructions: bodyInstructions|t('deployments'),
+        id: 'body',
+        name: 'body',
+        class: 'code',
+        rows: 10,
+        value: settings.body,
+        errors: settings.getErrors('body'),
+    }) }}
+</div>
+
+{{ forms.editableTableField({
+    label: 'Headers'|t('deployments'),
+    instructions: 'Extra request headers. Values are rendered as Twig and resolve environment variables, so both “Bearer ${DEPLOY_TOKEN}” and “{{ DEPLOY_SHA }}” work. Use the braces for an env var in the middle of a value — a bare “$DEPLOY_TOKEN” only resolves when it is the entire value. A Content-Type set here overrides automatic detection.'|t('deployments'),
+    id: 'headers',
+    name: 'headers',
+    cols: {
+        name: {
+            heading: 'Name'|t('deployments'),
+            type: 'singleline',
+            width: '35%',
+            placeholder: 'Authorization',
+        },
+        value: {
+            heading: 'Value'|t('deployments'),
+            type: 'singleline',
+            placeholder: 'Bearer ${DEPLOY_TOKEN}',
+        },
+    },
+    rows: settings.headers,
+    addRowLabel: 'Add a header'|t('deployments'),
+    allowAdd: true,
+    allowDelete: true,
+    allowReorder: true,
+    errors: settings.getErrors('headers'),
+}) }}

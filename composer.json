@@ -1,0 +1,42 @@
+{
+    "name": "sunnybyte/craft-deployments",
+    "description": "Send a configurable webhook after a Craft CMS deployment, from a console command or automatically after Craft Cloud's cloud/up.",
+    "type": "craft-plugin",
+    "license": "GPL-3.0-or-later",
+    "keywords": [
+        "craft",
+        "craftcms",
+        "craft-plugin",
+        "deployment",
+        "deploy",
+        "webhook",
+        "notifications",
+        "craft-cloud"
+    ],
+    "support": {
+        "issues": "https://github.com/sunnybyte/craft-deployments/issues",
+        "source": "https://github.com/sunnybyte/craft-deployments"
+    },
+    "require": {
+        "php": "^8.2",
+        "craftcms/cms": "^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "sunnybyte\\deployments\\": "src/"
+        }
+    },
+    "extra": {
+        "handle": "deployments",
+        "name": "Deployments",
+        "class": "sunnybyte\\deployments\\Plugin",
+        "version": "1.0.0",
+        "schemaVersion": "1.0.0",
+        "developer": "SunnyByte",
+        "developerUrl": "https://sunnybyte.com",
+        "documentationUrl": "https://github.com/sunnybyte/craft-deployments",
+        "changelogUrl": "https://raw.githubusercontent.com/sunnybyte/craft-deployments/main/CHANGELOG.md",
+        "hasSettings": true,
+        "hasCpSection": false
+    }
+}
