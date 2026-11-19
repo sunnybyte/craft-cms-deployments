@@ -14,8 +14,8 @@
         "craft-cloud"
     ],
     "support": {
-        "issues": "https://github.com/sunnybyte/craft-deployments/issues",
-        "source": "https://github.com/sunnybyte/craft-deployments"
+        "issues": "https://github.com/sunnybyte/craft-cms-deployments/issues",
+        "source": "https://github.com/sunnybyte/craft-cms-deployments"
     },
     "require": {
         "php": "^8.2",
@@ -30,12 +30,11 @@
         "handle": "deployments",
         "name": "Deployments",
         "class": "sunnybyte\\deployments\\Plugin",
-        "version": "1.0.0",
         "schemaVersion": "1.0.0",
         "developer": "SunnyByte",
         "developerUrl": "https://sunnybyte.com",
-        "documentationUrl": "https://github.com/sunnybyte/craft-deployments",
-        "changelogUrl": "https://raw.githubusercontent.com/sunnybyte/craft-deployments/main/CHANGELOG.md",
+        "documentationUrl": "https://github.com/sunnybyte/craft-cms-deployments",
+        "changelogUrl": "https://raw.githubusercontent.com/sunnybyte/craft-cms-deployments/main/CHANGELOG.md",
         "hasSettings": true,
         "hasCpSection": false
     }

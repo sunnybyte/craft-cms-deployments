@@ -94,8 +94,8 @@ class Plugin extends \craft\base\Plugin
     public function installedVersion(): ?string
     {
         // Craft's own view of the version, so this line always agrees with the
-        // Plugins screen. It comes from extra.version in composer.json, falling
-        // back to Composer's package version ("dev-main" for a branch install).
+        // Plugins screen. It is Composer's package version: the git tag for a
+        // tagged release, or "dev-main" for a branch install.
         $version = $this->getVersion();
 
         try {
