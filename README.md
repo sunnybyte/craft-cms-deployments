@@ -67,9 +67,14 @@ Every value is a string. Values that can't be determined are empty strings, neve
 `null`, so `{{ DEPLOY_SHA }}` never renders the word "null" and `|json_encode`
 always produces a JSON string.
 
-**About `DEPLOY_SHA`:** it comes from Composer's root package reference, which is
-`null` whenever the project wasn't installed from a git checkout. If your
-pipeline knows the commit, export `DEPLOY_SHA` and it wins:
+**About `DEPLOY_SHA`:** it is resolved from the first of these that has a value:
+
+1. the `DEPLOY_SHA` environment variable
+2. the `GIT_SHA` environment variable (set by Craft Cloud)
+3. Composer's root package reference, which is `null` whenever the project
+   wasn't installed from a git checkout
+
+If your pipeline knows the commit, export `DEPLOY_SHA` and it wins:
 
 ```bash
 DEPLOY_SHA=$(git rev-parse HEAD) ./craft deployments/notify

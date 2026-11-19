@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1 - 2026-11-18
+
+- Fixed `DEPLOY_SHA` being empty on Craft Cloud: it now falls back to the
+  `GIT_SHA` environment variable before Composer's root package reference.
+
 ## 1.0.0 - 2026-09-15
 
 - Initial release.

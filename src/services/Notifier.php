@@ -336,14 +336,18 @@ class Notifier
      *
      * $DEPLOY_SHA wins when set, because Composer's root package reference is
      * null whenever the project wasn't installed from a git checkout, and a
-     * pipeline that knows the SHA should be able to say so.
+     * pipeline that knows the SHA should be able to say so. $GIT_SHA is next:
+     * Craft Cloud sets it, and Cloud builds have no git checkout for Composer
+     * to read a reference from.
      */
     private function sha(): string
     {
-        $env = App::env('DEPLOY_SHA');
+        foreach (['DEPLOY_SHA', 'GIT_SHA'] as $name) {
+            $env = App::env($name);
 
-        if (is_string($env) && trim($env) !== '') {
-            return trim($env);
+            if (is_string($env) && trim($env) !== '') {
+                return trim($env);
+            }
         }
 
         try {
